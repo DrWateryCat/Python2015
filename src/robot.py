@@ -33,6 +33,8 @@ class MyRobot(wpilib.IterativeRobot):
         self.lifterjoystick = wpilib.Joystick(1)
         self.lifter = wpilib.Talon(4)
         wpilib.SmartDashboard.putNumber("multiplier", 0.75)
+        wpilib.SmartDashboard.putNumber("lifterState", 0)
+        self.lifterState = 0 #0 means not moving, 1 means moving
         
     def autonomousInit(self):
         """This method is called when autonomous is first entered."""
@@ -58,12 +60,17 @@ class MyRobot(wpilib.IterativeRobot):
         self.drive.update(self.drivejoystick)
         if self.drivejoystick.getRawButton(3) and not self.drivejoystick.getRawButton(1):
             self.lifter.set(1)
+            self.lifterState = 1
         elif not self.drivejoystick.getRawButton(3) and self.drivejoystick.getRawButton(1):
             self.lifter.set(-1)
+            self.lifterState = 1
         elif not self.drivejoystick.getRawButton(3) and not self.drivejoystick.getRawButton(1):
             self.lifter.set(0)
+            self.lifterState = 0
         elif self.drivejoystick.getRawButton(3) and self.drivejoystick.getRawButton(1):
             self.lifter.set(0)
+            self.lifterState = 0
+        wpilib.SmartDashboard.putNumber("lifterState", lifterState)
         
 
     def testPeriodic(self):
